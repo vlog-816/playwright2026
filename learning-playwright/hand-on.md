@@ -26,3 +26,7 @@ Day 28
 - dynamic controls: chờ element hiển thị/ không hiển thị
         + narrow-down searching scope: find all parent components
         + page.waitForSelector("", {state: 'hidden'})
+
+Day 29
+- JSArlert
+- Floating menu: evaluate(), binding param into evaluate()
