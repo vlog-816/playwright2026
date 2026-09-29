@@ -30,3 +30,23 @@ Day 28
 Day 29
 - JSArlert
 - Floating menu: evaluate(), binding param into evaluate()
+
+Day 30
+- POM: cách biến pape hoặc 1 phần của page thành class trong lập trình. Để dùng lại selector, method tương tác với element trên page, tránh lặp đi lặp lại.
+        + Scope to declare selector
+        + Constructor
+        + Main interaction methods || return Locator ||
+- structure:
+        + models:
+                + components
+                + pages: LoginPage
+        + types:
+                + DataType.ts
+- component models:
+    1. component in a page: footer, header, sidebar
+    2. List of components in page: 
+    3. Component in parent component
+    4. List of Components in parent component
+    5. Reusing BaseComponent
+
+Day 31
