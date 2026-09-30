@@ -1,6 +1,6 @@
 import { test, expect } from "@playwright/test";
 import { LoginPOMMethod01 } from "../modules/pages/LoginPOMMethod01";
-import { LoginCreds } from "../types/DataType";
+import { LoginCreds } from "../../types/DataType";
 import { LoginPOMMethod02 } from "../modules/pages/LoginPOMMethod02";
 
 const loginCreds01 = {

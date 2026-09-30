@@ -39,9 +39,13 @@ Day 30
 - structure:
         + models:
                 + components
-                + pages: LoginPage
+                + pages: LoginPage.ts, HomePage.ts
         + types:
                 + DataType.ts
+        + test-flow
+                + component
+                + global: FooterTestFlow.ts
+        + tests
 - component models:
     1. component in a page: footer, header, sidebar
     2. List of components in page: 
@@ -50,3 +54,25 @@ Day 30
     5. Reusing BaseComponent
 
 Day 31
+2. List of components in page
+3. 4. Component(s) in parent component
+5. Reusing BaseComponent
+   parent class: không có locator để tìm kiếm nó, chỉ chứa các attribute, method chung để class con reuse
+   child class: chỉ định locator để tìm kiếm nó, không chứa thêm attribute, method
+
+BasePage: chứa các component chung, từ khóa extends dùng để reuse logic. Chứa component, không chứa các element (trừ vài case)
+test-flow: middle layer 
+== module, page: tìm kiếm selector, thiết kế POM | controller (test-flow) | test ==
+- FooterTestFlow: logic cho việc test FooterComponent |>> InformationColumn >> CustimerServiceColumn >> ...FooterColumnComponen
+        verifyFooterComponent(){
+                this.verifyInfoColumn();
+                this.verifyServiceColumn();
+                this.verifyAccountColumn();
+                this.verifyAboutColumn();
+        }
+
+
+
+- FooterComponentTest:
+        const footerTestFlow = new FooterTestFlow();
+        footerTestFlow.verifyFooterComponent();
