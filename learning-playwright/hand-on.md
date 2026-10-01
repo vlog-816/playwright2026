@@ -70,9 +70,23 @@ test-flow: middle layer
                 this.verifyAccountColumn();
                 this.verifyAboutColumn();
         }
-
-
+        //logic
 
 - FooterComponentTest:
         const footerTestFlow = new FooterTestFlow();
         footerTestFlow.verifyFooterComponent();
+
+Day 32
+Data Driven: 1 bộ data cần test cho nhiều page, || hoặc 1 page cần test nhiều bộ data
+           a concept to reuse/loop over a suite of test data for a test logic
+        Nếu trang được extend từ 1 layout -> dùng chiến lược random   
+
+dùng async-await: handle asynchronus
+        1. find Element  -> 2. interact with Element
+           .locator()                .click()
+
+Context: 1 element (RAM) nằm ở nhiều component, lúc thì là lựa chọn radio button, lúc là lựa chọn select dropdown
+Resolve: abstract class: có method abstract selectRAM(). => các class con sẽ force viết select này  theo cách của riêng nó
+        abstract extends parent BaseComputer class: để reuse logic của getTitle, price, ...
+
+Day 33

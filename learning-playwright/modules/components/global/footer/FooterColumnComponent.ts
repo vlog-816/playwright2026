@@ -16,8 +16,12 @@ export default class FooterColumnComponent {
 
     async getLinkTexts(): Promise<string[]> {
 
-        const linkTextLocators = await this.component.locator(this.linkTextSelector).all();
+        return await this.component.locator(this.linkTextSelector).allInnerTexts();
+    }
 
-        return Promise.all(linkTextLocators.map(linkText => linkText.innerText()));
+    async getHrefs(): Promise<string[]> {
+        const hrefs = await this.component.locator(this.linkTextSelector).all();
+
+        return Promise.all(hrefs.map(async href => await href.getAttribute("href") ?? ''));
     }
 }
