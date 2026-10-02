@@ -118,7 +118,8 @@ Day 34
         const cheapComputerData: ComputerDataType = {
                 computerCompClass: CheapComputerComponent,
                 processorType: "Fast",
-                ran: "8 GB",
+                ram: "8 GB",
                 ....
         }       
 
+Day 35

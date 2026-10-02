@@ -3,20 +3,34 @@ import ProductEssentialComponent from "./ProductEssentialComponent";
 
 export default abstract class ComputerEssentialComponent extends ProductEssentialComponent {
 
-    private allCheckboxesSelector: string = "ul li input";
-
     constructor(component: Locator) {
         super(component)
     }
 
-    abstract selectRAM(value: string): Promise<void>;
-    abstract selectProcessor(value: string): Promise<void>;
+    abstract selectRAM(value: string): Promise<string>;
 
-    protected async selectRadioBtn(value: string): Promise<void> {
-        await this.component.locator(`//label[contains(text(),"${value}")]`).first().click();
+    abstract selectProcessor(value: string): Promise<string>;
+
+    async selectHDD(value: string): Promise<string> {
+        return await this.selectRadioBtn(value);
     }
 
-    protected async selectDropdownValue(value: string, dropdownLocator: Locator): Promise<void> { 
+    async selectOS(value: string): Promise<string> {
+        return await this.selectRadioBtn(value);
+    }
+
+    async selectSofware(value: string): Promise<string> {
+        return await this.selectRadioBtn(value);
+    }
+
+    async selectRadioBtn(value: string): Promise<string> {
+        const radioBtnLocator = this.component.locator(`//label[contains(text(),"${value}")]`).first();
+        await radioBtnLocator.click();
+
+        return await radioBtnLocator.innerText();
+    }
+
+    protected async selectDropdownValue(value: string, dropdownLocator: Locator): Promise<string> {
         const optionValues: string[] = await dropdownLocator.locator('option').allInnerTexts();
 
         const optionIndex: number = optionValues.findIndex(option => option.startsWith(value));
@@ -26,26 +40,7 @@ export default abstract class ComputerEssentialComponent extends ProductEssentia
         }
 
         await dropdownLocator.selectOption({ index: optionIndex })
-    }
 
-    async selectHDD(value: string): Promise<void> {
-        await this.component.locator(`//label[contains(text(),"${value}")]`).first().click();
-    }
-
-    async selectOS(value: string): Promise<void> {
-        await this.component.locator(`//label[contains(text(),"${value}")]`).first().click();
-    }
-
-    async selectSofware(value: string): Promise<void> {
-        await this.component.locator(`//label[contains(text(),"${value}")]`).first().click();
-    }
-
-    async unCheckCheckboxes(): Promise<void> {
-
-        const allCheckboxes = await this.component.locator(this.allCheckboxesSelector).all();
-        for (const checkbox of allCheckboxes) {
-            const isChecked = await checkbox.isChecked();
-            if (isChecked) await checkbox.click();
-        }
+        return optionValues[optionIndex]
     }
 }
