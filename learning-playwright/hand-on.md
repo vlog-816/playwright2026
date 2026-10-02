@@ -46,6 +46,10 @@ Day 30
                 + component
                 + global: FooterTestFlow.ts
         + tests
+                + global
+                + computer
+        + test_data
+                + Computer
 - component models:
     1. component in a page: footer, header, sidebar
     2. List of components in page: 
@@ -90,3 +94,31 @@ Resolve: abstract class: có method abstract selectRAM(). => các class con sẽ
         abstract extends parent BaseComputer class: để reuse logic của getTitle, price, ...
 
 Day 33
+generic type: có 1 page chứa 1 component. Component có nhiều kiểu component: Cheap, Standard, Expensive,....
+                nên cần tạo method return về kiểu Generic
+                computerCom<T extends ComputerEssentialComponent>(): T
+anotation
+
+Day 34
+- Tạo OrderComputerFlow, tạo kiểu type riêng bằng interface, tạo data test cho CheapComputerComponent, StandardComputerComponent,...
+- OrderComputerFlow{
+        constructor(page, computerData)
+        //logic of this controller...
+        buidAndAddToCart()
+                }
+- interface ComputerDataType{
+        loginCreds?: {username: string, password: string},
+        computerCompClass: ComputerComponentConstructor<ComputerEssentialComponent>,
+        processorType: string,
+        ram: string,
+        ....
+}
+
+- tạo data cho CheapComputerData
+        const cheapComputerData: ComputerDataType = {
+                computerCompClass: CheapComputerComponent,
+                processorType: "Fast",
+                ran: "8 GB",
+                ....
+        }       
+

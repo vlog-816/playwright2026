@@ -2,21 +2,22 @@ import { Locator } from "@playwright/test";
 import ComputerEssentialComponent from "./ComputerEssentialComponent";
 
 export default class StandardComputerComponent extends ComputerEssentialComponent {
-
     private allDropdownSelectors = "select[id^='product_attribute']"
+
+    async selectProcessor(value: string): Promise<void> {
+        const PROCESSOR_LOCATOR_INDEX = 0;
+        const allDropdowns: Locator[] = await this.component.locator(this.allDropdownSelectors).all();
+        const processorDropdown: Locator = allDropdowns[PROCESSOR_LOCATOR_INDEX];
+
+        this.selectDropdownValue(value, processorDropdown);
+    }
 
     async selectRAM(value: string) {
         const RAM_LOCATOR_INDEX = 1;
-        const ramDropdown: Locator = (await this.component.locator(this.allDropdownSelectors).all())[RAM_LOCATOR_INDEX];
-        const optionValues: string[] = await ramDropdown.allInnerTexts();
-
-        const optionIndex: number = optionValues.findIndex(option => option.startsWith(value));
-
-        if (optionIndex === -1) {
-            throw new Error(`There is no matching option for ${value}`);
-        }
-
-        await this.component.locator(ramDropdown).selectOption({ index: optionIndex })
+        const allDropdowns: Locator[] = await this.component.locator(this.allDropdownSelectors).all();
+        const ramDropdown: Locator = allDropdowns[RAM_LOCATOR_INDEX];
+        
+        this.selectDropdownValue(value, ramDropdown);
     }
 
 
