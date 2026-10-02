@@ -23,7 +23,7 @@ export default abstract class ComputerEssentialComponent extends ProductEssentia
         return await this.selectRadioBtn(value);
     }
 
-    async selectRadioBtn(value: string): Promise<string> {
+    protected async selectRadioBtn(value: string): Promise<string> {
         const radioBtnLocator = this.component.locator(`//label[contains(text(),"${value}")]`).first();
         await radioBtnLocator.click();
 

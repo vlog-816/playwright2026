@@ -9,5 +9,6 @@ export interface ComputerDataType {
     ram: string,
     hdd: string,
     os?: string,
-    software: string
+    software: string,
+    quantity?: number
 }

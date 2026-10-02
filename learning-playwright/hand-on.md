@@ -123,3 +123,8 @@ Day 34
         }       
 
 Day 35
+- quantity, inputQuantity, addToCart
+- totalPrice = (basePrice + additionPrice) * quantity
+- chờ khi request add to cart status 200 : page.waitForRequest(urlSlug)
+- Header
+- click on Cart

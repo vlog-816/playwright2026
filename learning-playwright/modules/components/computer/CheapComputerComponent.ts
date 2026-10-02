@@ -11,8 +11,8 @@ export default class CheapComputerComponent extends ComputerEssentialComponent {
         return await this.selectRadioBtn(value);
     }
 
-    async selectOS(value: string): Promise<void> {
-        console.log("There is no OS selection. Someone is trying to input");
+    async selectOS(value: string): Promise<string> {
+        return "There is no OS selection. Someone is trying to input";
     }
 
 

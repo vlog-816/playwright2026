@@ -2,7 +2,9 @@ import { Locator } from "@playwright/test";
 
 export default class ProductEssentialComponent {
 
-    private productName = ".product-name h1";
+    private productNameSelector = ".product-name h1";
+    private basePriceSelector = ".product-price";
+    private inputQuantity = "input[class='qty-input']"
     private allOptionsSelector: string = ".option-list input";
 
     //other base of product essential....
@@ -11,8 +13,17 @@ export default class ProductEssentialComponent {
         this.component = component;
     }
 
-    async getProductName() {
-        await this.component.locator(this.productName).innerText();
+    async getProductName(): Promise<string> {
+        return await this.component.locator(this.productNameSelector).innerText();
+    }
+    async getBasePrice(): Promise<number> {
+        const priceText = await this.component.locator(this.basePriceSelector).innerText();
+        return Number(priceText)
+    }
+
+    async getInputQuantity(): Promise<number> {
+        const qtyText = await this.component.locator(this.inputQuantity).innerText();
+        return Number(qtyText);
     }
 
     async unSelectAllOptions(): Promise<void> {
