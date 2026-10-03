@@ -4,7 +4,8 @@ export default class ProductEssentialComponent {
 
     private productNameSelector = ".product-name h1";
     private basePriceSelector = ".product-price";
-    private inputQuantity = "input[class='qty-input']"
+    private inputQuantitySelector = "input[class='qty-input']"
+    private addToCartBtnSelector = "input[id*=add-to-cart-button]";
     private allOptionsSelector: string = ".option-list input";
 
     //other base of product essential....
@@ -22,8 +23,12 @@ export default class ProductEssentialComponent {
     }
 
     async getInputQuantity(): Promise<number> {
-        const qtyText = await this.component.locator(this.inputQuantity).innerText();
+        const qtyText = await this.component.locator(this.inputQuantitySelector).innerText();
         return Number(qtyText);
+    }
+
+    async clickOnAddToCart(): Promise<void> {
+        await this.component.locator(this.addToCartBtnSelector).click();
     }
 
     async unSelectAllOptions(): Promise<void> {

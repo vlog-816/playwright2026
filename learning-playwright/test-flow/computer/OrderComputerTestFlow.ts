@@ -1,6 +1,7 @@
 import { Page } from '@playwright/test';
 import { ComputerDataType } from '../../test-data/ComputerDataType';
 import { ComputerDetailsPage } from '../../modules/pages/ComputerDetailsPage';
+import HeaderComponent from '../../modules/components/global/header/HeaderComponent';
 export default class OrderComputerTestFlow {
 
     private productPrice: number = 0;
@@ -36,6 +37,10 @@ export default class OrderComputerTestFlow {
                     softwarePrice: ${softwarePrice} | osPrice: ${osPrice} | quanlity: ${quantity} | qty: ${quantity}
                     basePrice:${basePrice} | additionPrice: ${additionPrice} | productPrice: ${this.productPrice}`);
 
+        await computerComp.clickOnAddToCart();
+        await this.page.waitForResponse(`**/addproducttocart/details**`);
+        await this.page.locator(HeaderComponent.HEADER_LOCATOR).scrollIntoViewIfNeeded();
+        await computerDetailsPage.headerComponent().clickOnShoppingCart();
     }
 
     private getAddionalPrice(optionFullText: string): number {
