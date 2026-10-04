@@ -9,7 +9,7 @@ export default class ShoppingCartPage extends BasePage {
         return new TotalsComponent(this.page.locator(TotalsComponent.LOCATOR))
     }
 
-    async cartItemRowComponent(): Promise<CartItemRowComponent[]> {
+    async cartItemRowComponentList(): Promise<CartItemRowComponent[]> {
         const cartItemRows: Locator[] = await this.page.locator(CartItemRowComponent.LOCATOR).all();
 
         return cartItemRows.map(row => new CartItemRowComponent(row))

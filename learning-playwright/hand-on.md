@@ -38,12 +38,13 @@ Day 30
         + Main interaction methods || return Locator ||
 - structure:
         + models:
-                + components
-                + pages: LoginPage.ts, HomePage.ts
+                + components: global, computer, checkoutPage
+                + pages: LoginPage.ts, HomePage.ts, ComputerDetailsPage.ts, ShoppingCartPage.ts, ChechOutOptionPage.ts,...
         + types:
                 + DataType.ts
+                + ComputerDataType.ts
         + test-flow
-                + component
+                + component: OrderTestFlow.ts
                 + global: FooterTestFlow.ts
         + tests
                 + global
@@ -129,3 +130,22 @@ Day 35
 - Header
 - click on Cart
 - CartItemRowComponent : [], TotalsComponent
+
+Day 36
+- CartItemRowComponent: getPrice, getQty, getSubTotal
+- TotalsComponent: acceptTos(), priceCategories(), clickOnCheckoutBtn()
+- OrderComputerFlow: 
+        verifyShoppingCart()
+                //logic...
+                verifyung all item rows: expect length > 0, expect (price*+*qty) = subtotal
+                verifying totals component: expect subTotal, expect total
+        agreeTosAndCheckout()
+                //logic...
+                acceptTos
+                clickOnChoutBtn
+                clickOnCheckOutAsGuestBtn
+- CheckoutPage: billingAddressComponent(), shippingAddressComponent(), ShippingMethodComponent(), paymentMethodComponent(), paymentInformationComponent(), confirmOrderComponent()
+- Test.spec.ts: 
+        buildComputerAndAddToCart()
+        verifyShoppingCart()
+        agreeTosAndCheckout()

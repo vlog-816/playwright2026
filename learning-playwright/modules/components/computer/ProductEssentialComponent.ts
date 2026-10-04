@@ -22,14 +22,13 @@ export default class ProductEssentialComponent {
         return Number(priceText)
     }
 
-    async getInputQuantity(): Promise<number> {
-        const qtyText = await this.component.locator(this.inputQuantitySelector).innerText();
-        return Number(qtyText);
+    async inputQuantity(value: number): Promise<void> {
+        await this.component.locator(this.inputQuantitySelector).fill(value.toString());
     }
 
     async clickOnAddToCart(): Promise<string> {
         await this.component.locator(this.addToCartBtnSelector).click();
-        
+
         return "**/addproducttocart/details**"
     }
 

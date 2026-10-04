@@ -7,5 +7,6 @@ export const standardComputerDataType: ComputerDataType = {
     ram: "4GB",
     hdd: "320 GB",
     os: "Windows 10",
-    software: "Acrobat Reader"
+    software: "Acrobat Reader",
+    quantity: 2
 }
