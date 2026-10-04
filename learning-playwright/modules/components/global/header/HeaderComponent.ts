@@ -1,5 +1,5 @@
 import { Locator } from "@playwright/test";
-import ShoppingCartComponent from "./ShoppingCartComponent";
+import ShoppingCartComponent from "../../shopping-cart/TotalsComponent";
 
 export default class HeaderComponent {
 
@@ -12,13 +12,11 @@ export default class HeaderComponent {
         this.component = component;
     }
 
-    //components inside
-    shoppingCartComp(): ShoppingCartComponent {
-        return new ShoppingCartComponent(this.component.locator(ShoppingCartComponent.LOCATOR));
-    }
+    //components inside, method
 
     async clickOnShoppingCart(): Promise<void>{
-        await this.component.locator(this.shoppingCartSelector).first().click();
+        await this.component.locator(this.shoppingCartSelector).scrollIntoViewIfNeeded();
+        await this.component.locator(this.shoppingCartSelector).click();
     }
 
 }

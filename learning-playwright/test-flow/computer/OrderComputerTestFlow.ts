@@ -37,9 +37,11 @@ export default class OrderComputerTestFlow {
                     softwarePrice: ${softwarePrice} | osPrice: ${osPrice} | quanlity: ${quantity} | qty: ${quantity}
                     basePrice:${basePrice} | additionPrice: ${additionPrice} | productPrice: ${this.productPrice}`);
 
-        await computerComp.clickOnAddToCart();
-        await this.page.waitForResponse(`**/addproducttocart/details**`);
-        await this.page.locator(HeaderComponent.HEADER_LOCATOR).scrollIntoViewIfNeeded();
+        //Add to cart
+        const requestSlug = await computerComp.clickOnAddToCart();
+        await this.page.waitForResponse(requestSlug);
+
+        //Navigate to Shopping cart page
         await computerDetailsPage.headerComponent().clickOnShoppingCart();
     }
 

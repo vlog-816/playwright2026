@@ -10,12 +10,12 @@ export default class BasePage {
         this.page = page;
     }
 
-    footerComponent(): FooterComponent {
-        return new FooterComponent(this.page.locator(FooterComponent.FOOTER_LOCATOR));
-    }
-
     headerComponent(): HeaderComponent {
         return new HeaderComponent(this.page.locator(HeaderComponent.HEADER_LOCATOR));
+    }
+
+    footerComponent(): FooterComponent {
+        return new FooterComponent(this.page.locator(FooterComponent.FOOTER_LOCATOR));
     }
 
 }

@@ -27,8 +27,10 @@ export default class ProductEssentialComponent {
         return Number(qtyText);
     }
 
-    async clickOnAddToCart(): Promise<void> {
+    async clickOnAddToCart(): Promise<string> {
         await this.component.locator(this.addToCartBtnSelector).click();
+        
+        return "**/addproducttocart/details**"
     }
 
     async unSelectAllOptions(): Promise<void> {

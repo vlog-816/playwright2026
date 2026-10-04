@@ -1,8 +1,8 @@
 import { Locator } from "@playwright/test";
 
-export default class ShoppingCartComponent {
+export default class TotalsComponent {
 
-    public static readonly LOCATOR = "'.page.shopping-cart-page'"
+    public static readonly LOCATOR = ".cart-footer .totals"
 
     constructor(private component: Locator) {
         this.component = component;

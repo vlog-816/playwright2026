@@ -128,3 +128,4 @@ Day 35
 - chờ khi request add to cart status 200 : page.waitForRequest(urlSlug)
 - Header
 - click on Cart
+- CartItemRowComponent : [], TotalsComponent
