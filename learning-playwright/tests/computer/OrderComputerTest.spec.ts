@@ -12,6 +12,7 @@ test.describe('Test Order Computer Flow', () => {
         await orderCompFlow.buildAndAddToCart();
         await orderCompFlow.verifyShoppingCart();
         await orderCompFlow.agreeTosAndCheckout();
+        await orderCompFlow.inputBillingAddress();
 
     })
 
@@ -22,6 +23,7 @@ test.describe('Test Order Computer Flow', () => {
         await orderCompFlow.buildAndAddToCart();
         await orderCompFlow.verifyShoppingCart();
         await orderCompFlow.agreeTosAndCheckout();
+        await orderCompFlow.inputBillingAddress();
 
     })
 

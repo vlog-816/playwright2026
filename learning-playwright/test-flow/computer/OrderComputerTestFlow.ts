@@ -1,10 +1,11 @@
 import { expect, Page } from '@playwright/test';
 import { ComputerDataType } from '../../test-data/ComputerDataType';
 import { ComputerDetailsPage } from '../../modules/pages/ComputerDetailsPage';
-import HeaderComponent from '../../modules/components/global/header/HeaderComponent';
 import ShoppingCartPage from '../../modules/pages/ShoppingCartPage';
 import CartItemRowComponent from '../../modules/components/shopping-cart/CartItemRowComponent';
 import CheckoutOptionPage from '../../modules/pages/CheckoutOptionPage';
+import defaultCheckoutData from '../../test-data/DefaultCheckoutData.json'
+import CheckoutPage from '../../modules/pages/CheckoutPage';
 export default class OrderComputerTestFlow {
 
     private productPrice: number = 0;
@@ -94,6 +95,28 @@ export default class OrderComputerTestFlow {
 
         const checkoutOptionPage = new CheckoutOptionPage(this.page);
         await checkoutOptionPage.checkoutAsGuest();
+    }
+
+    async inputBillingAddress() {
+
+        const { firstName, lastName, email, company, country, stateProvince, city, address1, address2,
+            zipPostalCode, phoneNumber, faxNumber } = defaultCheckoutData;
+
+        const billingAddrComp = new CheckoutPage(this.page).billingAddressComp();
+        await billingAddrComp.inputFirstname(firstName);
+        await billingAddrComp.inputLastname(lastName);
+        await billingAddrComp.inputEmail(email);
+        await billingAddrComp.inputCompany(company);
+        await billingAddrComp.selectCountry(country);
+        await billingAddrComp.selectStateProvince(stateProvince);
+        await billingAddrComp.inputCity(city);
+        await billingAddrComp.inputAddress1(address1);
+        await billingAddrComp.inputAddress2(address2);
+        await billingAddrComp.inputZip(zipPostalCode);
+        await billingAddrComp.inputPhoneNumber(phoneNumber);
+        await billingAddrComp.inputFax(faxNumber);
+        await billingAddrComp.clickContinueBtn();
+
     }
 
     private getAddionalPrice(optionFullText: string): number {

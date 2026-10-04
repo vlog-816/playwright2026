@@ -144,6 +144,13 @@ Day 36
                 acceptTos
                 clickOnChoutBtn
                 clickOnCheckOutAsGuestBtn
+        inputBillingAddress()
+                //logic....
+                Json {default checkout data} : import defaultCheckouData from...
+
+-BillingAddressComponent:
+        inputFirstname(), inputLastname(), inputEmail(), ...
+
 - CheckoutPage: billingAddressComponent(), shippingAddressComponent(), ShippingMethodComponent(), paymentMethodComponent(), paymentInformationComponent(), confirmOrderComponent()
 - Test.spec.ts: 
         buildComputerAndAddToCart()
