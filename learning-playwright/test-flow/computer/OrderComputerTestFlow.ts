@@ -5,6 +5,7 @@ import ShoppingCartPage from '../../modules/pages/ShoppingCartPage';
 import CartItemRowComponent from '../../modules/components/shopping-cart/CartItemRowComponent';
 import CheckoutOptionPage from '../../modules/pages/CheckoutOptionPage';
 import defaultCheckoutData from '../../test-data/DefaultCheckoutData.json';
+import defaultCardData from '../../test-data/DefaultCardData.json';
 import CheckoutPage from '../../modules/pages/CheckoutPage';
 export default class OrderComputerTestFlow {
 
@@ -144,7 +145,35 @@ export default class OrderComputerTestFlow {
     async selectPaymentMethod() {
         const paymentMethodComp = new CheckoutPage(this.page).paymentMethodComp();
         await paymentMethodComp.selectPaymentMethod();
-        await paymentMethodComp.clickOnContinueBtn();
+        const responseSlug = await paymentMethodComp.clickOnContinueBtn();
+        await this.page.waitForResponse(responseSlug);
+
+    }
+
+    async inputPaymentInformation() {
+
+        const paymentMethodComp = new CheckoutPage(this.page).paymentInformationComp();
+        const { firstName, lastName } = defaultCheckoutData;
+        const { visa } = defaultCardData;
+        const { creditCardType, cardNumber, expireMonth, expireYear, cvc } = visa;
+
+        await paymentMethodComp.selectCreditCard(creditCardType);
+        await paymentMethodComp.inputCardholderName(`${firstName} ${lastName}`);
+        await paymentMethodComp.inputCardNumber(cardNumber);
+        await paymentMethodComp.inputExpirationDate(expireMonth, expireYear);
+        await paymentMethodComp.inputCardCode(cvc);
+
+        const responseSlug = await paymentMethodComp.clickOnContinueBtn();
+        await this.page.waitForResponse(responseSlug);
+
+    }
+
+    async confirmOrder() {
+
+        const confirmOrderComp = new CheckoutPage(this.page).confirmOrderComp();
+        const responseSlug = await confirmOrderComp.clickOnContinueBtn();
+
+        await this.page.waitForResponse(responseSlug);
     }
 
     private getAddionalPrice(optionFullText: string): number {

@@ -16,8 +16,10 @@ export default class PaymentMethodComponent {
         await this.component.locator(this.creditCartSel).click();
     }
 
-    async clickOnContinueBtn(): Promise<void> {
+    async clickOnContinueBtn(): Promise<string> {
         await this.component.locator(this.continueBtnSel).click();
+
+        return `**/OpcSavePaymentMethod/**`
     }
 
 }

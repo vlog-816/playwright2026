@@ -174,7 +174,7 @@ Day 37
                 inputCardHolder()
                 ...
 - ConfirmationOrder:
-                getDEtailsItem(...)
+                getDetailsItem(...)
                 getPrice(...)
 
 Day 38

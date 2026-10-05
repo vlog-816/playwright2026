@@ -1,0 +1,25 @@
+{
+  "visa": {
+    "creditCardType": "Visa",
+    "cardNumber": "4032030595733560",
+    "expireMonth": "05",
+    "expireYear": "2031",
+    "cvc": "849"
+  },
+
+  "discover": {
+    "creditCardType": "Discover",
+    "cardNumber": "6011046126607123",
+    "expireMonth": "07",
+    "expireYear": "2029",
+    "cvc": "361"
+  },
+  
+  "masterCard": {
+    "creditCardType": "MasterCard",
+    "cardNumber": "5110923267037041",
+    "expireMonth": "05",
+    "expireYear": "2028",
+    "cvc": "762"
+  }
+}
