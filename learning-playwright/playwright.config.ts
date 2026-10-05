@@ -31,7 +31,18 @@ export default defineConfig({
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
     headless: false,
+    // Cấu hình cho các HÀNH ĐỘNG tương tác DOM (Ví dụ: await locator.click())
+    actionTimeout: 15000,
+    navigationTimeout: 30000,
   },
+
+  expect: {
+    // Cấu hình cho việc KIỂM TRA hiển thị (Ví dụ: await expect(locator).toBeVisible())
+    // Playwright sẽ liên tục kiểm tra DOM xem phần tử xuất hiện chưa trong suốt 15 giây này
+    timeout: 15000, // Tăng lên 15 giây (Mặc định là 5s)
+  },
+
+  timeout: 60000,
 
   /* Configure projects for major browsers */
   projects: [

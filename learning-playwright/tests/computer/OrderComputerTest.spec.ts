@@ -13,17 +13,23 @@ test.describe('Test Order Computer Flow', () => {
         await orderCompFlow.verifyShoppingCart();
         await orderCompFlow.agreeTosAndCheckout();
         await orderCompFlow.inputBillingAddress();
-
+        await orderCompFlow.inputShippingAddress();
+        await orderCompFlow.selectShippingMethod();
+        await orderCompFlow.selectPaymentMethod();
+        
     })
-
+    
     test('Order Standard Computer', async ({ page }) => {
-
+        
         await page.goto('/build-your-own-computer');
         const orderCompFlow = new OrderComputerTestFlow(page, standardComputerDataType);
         await orderCompFlow.buildAndAddToCart();
         await orderCompFlow.verifyShoppingCart();
         await orderCompFlow.agreeTosAndCheckout();
         await orderCompFlow.inputBillingAddress();
+        await orderCompFlow.inputShippingAddress();
+        await orderCompFlow.selectShippingMethod();
+        await orderCompFlow.selectPaymentMethod();
 
     })
 

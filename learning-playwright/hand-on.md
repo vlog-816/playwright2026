@@ -156,3 +156,26 @@ Day 36
         buildComputerAndAddToCart()
         verifyShoppingCart()
         agreeTosAndCheckout()
+
+Day 37
+- OrderComputerFlow:
+        //logic...
+        ClickContinueBtn()
+        selectShippingMethod(){logic...: randomly select, get text, get shippinig fee }
+        selectPaymentMethod()
+        inputPaymentInformation(): card info using in developer.payment => DefaultCheckoutCard.json
+        confirmOrder(): 
+        
+- ShippingAddressComponent: ClickContinueBtn()
+- ShippingMethod: getAllShippingMethodLocs() 
+- PaymentMethod: chọn payment method sẽ ảnh hưởng đến payment information phía sau. HARD CODE now: Credit Card
+- PaymentMethodInformation: 
+                selectCreditCart()
+                inputCardHolder()
+                ...
+- ConfirmationOrder:
+                getDEtailsItem(...)
+                getPrice(...)
+
+Day 38
+- handle: 
