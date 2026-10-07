@@ -171,3 +171,6 @@ Day 38
 - handle new tab then close it
 - handle PaymentMethod: đưa payment method vào test data
                 switch-case: theo payment method
+
+Day 39
+- configuration

@@ -1,4 +1,3 @@
-import { PaymentType } from './PaymentConstants';
 import { LoginCreds } from './LoginDataType';
 import ComputerEssentialComponent from '../modules/components/computer/ComputerEssentialComponent';
 import { ComputerComponentConstructor } from '../modules/pages/ComputerDetailsPage';
@@ -14,4 +13,5 @@ export interface ComputerDataType {
     quantity?: number;
     paymentMethod?: string;
     creditCard?: string;
+    poNumber?: string | any;
 }

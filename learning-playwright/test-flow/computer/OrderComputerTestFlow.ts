@@ -180,8 +180,23 @@ export default class OrderComputerTestFlow {
         default: inputCreditCard
 */
         const paymentInforComp = new CheckoutPage(this.page).paymentInformationComp();
+        const paymentMethod = this.computerData.paymentMethod || PAYMENT_METHOD.credit;
 
-        await this.inputCreditCard(this.computerData.creditCard, paymentInforComp)
+        switch (paymentMethod) {
+            case PAYMENT_METHOD.credit:
+                await this.inputCreditCard(this.computerData.creditCard, paymentInforComp);
+                break;
+            case PAYMENT_METHOD.purchase:
+                await paymentInforComp.inputPoNumber(this.computerData.poNumber)
+                break;
+            case PAYMENT_METHOD.money:
+            case PAYMENT_METHOD.cod:
+                break;
+            default:
+                await this.inputCreditCard(this.computerData.creditCard, paymentInforComp);
+                break;
+        }
+
         const responseSlug = await paymentInforComp.clickOnContinueBtn();
         await this.page.waitForResponse(responseSlug);
 

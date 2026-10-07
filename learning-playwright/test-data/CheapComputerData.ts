@@ -32,7 +32,7 @@ export const cheapComputerData: ComputerDataType[] = [
         software: "Other Office Suite",
         paymentMethod: PAYMENT_METHOD.money,
     },
-    
+
     {
         computerClass: CheapComputerComponent,
         processor: "Medium",
@@ -40,6 +40,7 @@ export const cheapComputerData: ComputerDataType[] = [
         hdd: "320 GB",
         software: "Office Suite",
         paymentMethod: PAYMENT_METHOD.purchase,
+        poNumber: "PO0123456",
     },
 
 ]

@@ -10,6 +10,7 @@ export default class PaymentInformationComponent {
     private expireMonthSel = "#ExpireMonth";
     private expireYearSel = "#ExpireYear";
     private cardCodeDel = "#CardCode";
+    private poNumberSel = "#PurchaseOrderNumber"
 
 
     constructor(private component: Locator) {
@@ -35,6 +36,10 @@ export default class PaymentInformationComponent {
 
     async inputCardCode(value: string): Promise<void> {
         await this.component.locator(this.cardCodeDel).fill(value);
+    }
+
+    async inputPoNumber(value: string | any): Promise<void> {
+        await this.component.locator(this.poNumberSel).fill(value);
     }
 
     async clickOnContinueBtn(): Promise<string> {

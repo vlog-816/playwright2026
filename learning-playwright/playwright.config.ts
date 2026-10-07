@@ -27,13 +27,16 @@ export default defineConfig({
   use: {
     /* Base URL to use in actions like `await page.goto('')`. */
     baseURL: 'https://demowebshop.tricentis.com/',
-
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
     headless: false,
-    // Cấu hình cho các HÀNH ĐỘNG tương tác DOM (Ví dụ: await locator.click())
+    /* Cấu hình cho các HÀNH ĐỘNG tương tác DOM (Ví dụ: await locator.click())*/
     actionTimeout: 15000,
     navigationTimeout: 30000,
+    /* Capture screenshot after each test failure.*/
+    screenshot: 'only-on-failure',
+    /* Record video only when retrying a test for the first time. */
+    video: 'on-first-retry'
   },
 
   expect: {
