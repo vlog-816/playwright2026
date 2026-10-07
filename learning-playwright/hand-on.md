@@ -168,4 +168,6 @@ Day 38
   Test: cheapData.foreach(arrow function (test(...//method()...)))
 - Structure: tạo 1 file Test riêng cho case validation required fields
         buildComputerSelection(): viết lại logic để chọn các field là option => nếu là required field thì sẽ đưa vào data empty, và check rỗng
-- handle:
+- handle new tab then close it
+- handle PaymentMethod: đưa payment method vào test data
+                switch-case: theo payment method

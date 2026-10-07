@@ -7,15 +7,18 @@ import CheckoutOptionPage from '../../modules/pages/CheckoutOptionPage';
 import defaultCheckoutData from '../../test-data/DefaultCheckoutData.json';
 import defaultCardData from '../../test-data/DefaultCardData.json';
 import CheckoutPage from '../../modules/pages/CheckoutPage';
+import { CREDIT_CARD, PAYMENT_METHOD } from '../../test-data/PaymentConstants';
+import PaymentInformationComponent from '../../modules/components/checkout-page/PaymentInformationComponent';
 export default class OrderComputerTestFlow {
 
     private productPrice: number = 0;
     constructor(private page: Page, private computerData: ComputerDataType) {
         this.page = page;
-        this.computerData = computerData
+        this.computerData = computerData;
+
     }
 
-    async buildAndAddToCart() {
+    async buildComputerSelectionAndAddToCart() {
         const computerDetailsPage = new ComputerDetailsPage(this.page);
         const { computerClass, processor, ram, hdd, os, software, quantity } = this.computerData
         console.log(this.computerData);
@@ -23,19 +26,25 @@ export default class OrderComputerTestFlow {
         const computerComp = computerDetailsPage.computerComponent(computerClass);
         await computerComp.unSelectAllOptions();
 
-        const processorPrice = this.getAddionalPrice(await computerComp.selectProcessor(processor));
-        const ramPrice = this.getAddionalPrice(await computerComp.selectRAM(ram));
-        const hddPrice = this.getAddionalPrice(await computerComp.selectHDD(hdd));
-        const softwarePrice = this.getAddionalPrice(await computerComp.selectSofware(software));
+        let processorPrice = 0;
+        let ramPrice = 0;
+        let hddPrice = 0;
+        let softwarePrice = 0;
+
+        if (processor) { processorPrice = this.getAddionalPrice(await computerComp.selectProcessor(processor)); }
+
+        if (ram) { ramPrice = this.getAddionalPrice(await computerComp.selectRAM(ram)); }
+
+        if (hdd) { hddPrice = this.getAddionalPrice(await computerComp.selectHDD(hdd)); }
+
+        if (software) { softwarePrice = this.getAddionalPrice(await computerComp.selectSofware(software)); }
 
         let osPrice = 0;
-        if (os !== undefined && os !== null) {
+        if (os) {
             osPrice = this.getAddionalPrice(await computerComp.selectOS(os));
         }
 
-        if (quantity !== undefined && quantity !== null) {
-            await computerComp.inputQuantity(quantity);
-        }
+        if (quantity) { await computerComp.inputQuantity(quantity); }
 
         const basePrice = await computerComp.getBasePrice();
         const additionPrice = processorPrice + ramPrice + hddPrice + softwarePrice + osPrice;
@@ -45,12 +54,18 @@ export default class OrderComputerTestFlow {
         console.log(`processor Price: ${processorPrice} | ramPrice: ${ramPrice} | hddPrice: ${hddPrice}
                     softwarePrice: ${softwarePrice} | osPrice: ${osPrice} | quanlity: ${quantity}
                     |basePrice:${basePrice} | additionPrice: ${additionPrice} | productPrice: ${this.productPrice}`);
-
         //Add to cart
+
         const requestSlug = await computerComp.clickOnAddToCart();
         await this.page.waitForResponse(requestSlug);
+    }
+
+    async buildAndAddToCart() {
+
+        await this.buildComputerSelectionAndAddToCart();
 
         //Navigate to Shopping cart page
+        const computerDetailsPage = new ComputerDetailsPage(this.page);
         await computerDetailsPage.headerComponent().clickOnShoppingCart();
     }
 
@@ -116,13 +131,16 @@ export default class OrderComputerTestFlow {
         await billingAddrComp.inputZip(zipPostalCode);
         await billingAddrComp.inputPhoneNumber(phoneNumber);
         await billingAddrComp.inputFax(faxNumber);
-        await billingAddrComp.clickContinueBtn();
+
+        const response = await billingAddrComp.clickContinueBtn();
+        await this.page.waitForResponse(response);
 
     }
 
     async inputShippingAddress() {
         const shippingAddressComp = new CheckoutPage(this.page).shippingAddressComp();
-        await shippingAddressComp.clickOnContinueBtn();
+        const response = await shippingAddressComp.clickOnContinueBtn();
+        await this.page.waitForResponse(response);
     }
 
     async selectShippingMethod() {
@@ -138,32 +156,33 @@ export default class OrderComputerTestFlow {
 
         console.log('shippingFee:', shippingFee);
 
-        await shippingMethodComp.clickOnContinueBtn();
+        const response = await shippingMethodComp.clickOnContinueBtn();
+        await this.page.waitForResponse(response);
 
     }
 
     async selectPaymentMethod() {
         const paymentMethodComp = new CheckoutPage(this.page).paymentMethodComp();
-        await paymentMethodComp.selectPaymentMethod();
+        await paymentMethodComp.selectPaymentMethod(this.computerData.paymentMethod || PAYMENT_METHOD.credit);
         const responseSlug = await paymentMethodComp.clickOnContinueBtn();
         await this.page.waitForResponse(responseSlug);
-
     }
 
     async inputPaymentInformation() {
+        /*Payment method: cash, money,...
+    select PaymentType.ts ...
+    ComputerDataType.ts : PaymentType
+    switch (paymentType)
+        case cash: input...
+        case monew: ....
+        case creditCard: inputCreditCard()
+        case purchase:
+        default: inputCreditCard
+*/
+        const paymentInforComp = new CheckoutPage(this.page).paymentInformationComp();
 
-        const paymentMethodComp = new CheckoutPage(this.page).paymentInformationComp();
-        const { firstName, lastName } = defaultCheckoutData;
-        const { visa } = defaultCardData;
-        const { creditCardType, cardNumber, expireMonth, expireYear, cvc } = visa;
-
-        await paymentMethodComp.selectCreditCard(creditCardType);
-        await paymentMethodComp.inputCardholderName(`${firstName} ${lastName}`);
-        await paymentMethodComp.inputCardNumber(cardNumber);
-        await paymentMethodComp.inputExpirationDate(expireMonth, expireYear);
-        await paymentMethodComp.inputCardCode(cvc);
-
-        const responseSlug = await paymentMethodComp.clickOnContinueBtn();
+        await this.inputCreditCard(this.computerData.creditCard, paymentInforComp)
+        const responseSlug = await paymentInforComp.clickOnContinueBtn();
         await this.page.waitForResponse(responseSlug);
 
     }
@@ -187,5 +206,36 @@ export default class OrderComputerTestFlow {
         if (matches) return Number(matches[1].trim())
 
         return 0;
+    }
+
+    private async inputCreditCard(card: any, paymentInfoComp: PaymentInformationComponent) {
+
+        const { firstName, lastName } = defaultCheckoutData;
+
+        let cardType;
+        switch (card) {
+            case CREDIT_CARD.amex:
+                cardType = defaultCardData.amex;
+                break;
+            case CREDIT_CARD.discover:
+                cardType = defaultCardData.discover;
+                break;
+            case CREDIT_CARD.master:
+                cardType = defaultCardData.master;
+                break;
+            case CREDIT_CARD.visa:
+                cardType = defaultCardData.visa;
+                break;
+            default:
+                throw new Error(`There is no card type ${card}`)
+        }
+
+        const { creditCardType, cardNumber, expireMonth, expireYear, cvc } = cardType;
+
+        await paymentInfoComp.selectCreditCard(creditCardType);
+        await paymentInfoComp.inputCardholderName(`${firstName} ${lastName}`);
+        await paymentInfoComp.inputCardNumber(cardNumber);
+        await paymentInfoComp.inputExpirationDate(expireMonth, expireYear);
+        await paymentInfoComp.inputCardCode(cvc);
     }
 }

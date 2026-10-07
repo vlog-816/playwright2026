@@ -15,8 +15,9 @@ export default class ShippingMethodComponent {
         return await this.component.locator(this.shippingMethodListSel).all();
     }
 
-    async clickOnContinueBtn(): Promise<void> {
+    async clickOnContinueBtn(): Promise<string> {
         await this.component.locator(this.continueBtnSel).click();
+        return `**/OpcSaveShippingMethod/**`
     }
 
 }

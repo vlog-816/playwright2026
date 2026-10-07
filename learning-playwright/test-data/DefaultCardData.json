@@ -14,12 +14,20 @@
     "expireYear": "2029",
     "cvc": "361"
   },
-  
-  "masterCard": {
+
+  "master": {
     "creditCardType": "MasterCard",
     "cardNumber": "5110923267037041",
     "expireMonth": "05",
     "expireYear": "2028",
     "cvc": "762"
+  },
+
+  "amex": {
+    "creditCardType": "Amex",
+    "cardNumber": "",
+    "expireMonth": "",
+    "expireYear": "",
+    "cvc": ""
   }
 }

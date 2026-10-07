@@ -1,7 +1,7 @@
 import StandardComputerComponent from "../modules/components/computer/StandardComputerComponent";
 import { ComputerDataType } from "./ComputerDataType";
 
-export const standardComputerDataType: ComputerDataType[] = [
+export const standardComputerData: ComputerDataType[] = [
     {
         computerClass: StandardComputerComponent,
         processor: "2.2 GHz",

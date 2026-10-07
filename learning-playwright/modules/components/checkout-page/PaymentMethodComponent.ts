@@ -3,7 +3,7 @@ import { Locator } from "@playwright/test";
 export default class PaymentMethodComponent {
 
     public static readonly LOCATOR = "#opc-payment_method";
-    private creditCartSel = "#paymentmethod_2";
+    private allMethodsSel = ".method-name";
     private continueBtnSel = "input[onclick='PaymentMethod.save()']";
 
 
@@ -11,9 +11,10 @@ export default class PaymentMethodComponent {
         this.component = component;
     }
 
-    async selectPaymentMethod(): Promise<void> {
-        await this.component.locator(this.creditCartSel).waitFor({ state: "visible", timeout: 15 * 1000 });
-        await this.component.locator(this.creditCartSel).click();
+    async selectPaymentMethod(method: string): Promise<void> {
+        const methodLocation = this.component.locator(this.allMethodsSel).filter({ hasText: method }).locator("input");
+        await methodLocation.waitFor({ state: "visible", timeout: 15 * 1000 });
+        await methodLocation.click();
     }
 
     async clickOnContinueBtn(): Promise<string> {

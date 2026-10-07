@@ -69,8 +69,9 @@ export default class BillingAddressComponent {
         await this.component.locator(this.faxNumberSel).fill(value)
     }
 
-    async clickContinueBtn(): Promise<void> {
+    async clickContinueBtn(): Promise<string> {
         await this.component.locator(this.continueBtnSel).click();
+        return `**/OpcSaveBilling/**`
     }
 
 }

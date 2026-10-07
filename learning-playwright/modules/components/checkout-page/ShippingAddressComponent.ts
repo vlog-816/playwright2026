@@ -9,8 +9,10 @@ export default class ShippingAddressComponent {
         this.component = component;
     }
 
-    async clickOnContinueBtn(): Promise<void> {
+    async clickOnContinueBtn(): Promise<string> {
         await this.component.locator(this.continueBtnSel).waitFor({ state: "visible", timeout: 15 * 1000 });
         await this.component.locator(this.continueBtnSel).click();
+
+        return `**/OpcSaveShipping/**`
     }
 }
