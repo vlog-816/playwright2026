@@ -174,3 +174,4 @@ Day 38
 
 Day 39
 - configuration
+report: html, allure-reporter
