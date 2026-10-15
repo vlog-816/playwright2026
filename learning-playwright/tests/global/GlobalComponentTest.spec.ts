@@ -1,6 +1,6 @@
 import { test } from '@playwright/test';
-import FooterTestFlow from '../../modules/test-flow/global/FooterTestFlow';
-import HeaderTestFlow from '../../modules/test-flow/global/HeaderTestFlow';
+import FooterTestFlow from '../../test-flow/global/FooterTestFlow';
+import HeaderTestFlow from '../../test-flow/global/HeaderTestFlow';
 
 const PAGES = [
     { pageName: "HomePage", slug: "/" },

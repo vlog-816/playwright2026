@@ -1,7 +1,7 @@
 import { test, expect } from "@playwright/test";
-import { LoginPOMMethod01 } from "../modules/pages/LoginPOMMethod01";
-import { LoginCreds } from "../../types/DataType";
-import { LoginPOMMethod02 } from "../modules/pages/LoginPOMMethod02";
+import { LoginCreds } from "../../test-data/LoginDataType";
+import { LoginPOMMethod01 } from "../../modules/pages/traditional/LoginPOMMethod01";
+import { LoginPOMMethod02 } from "../../modules/pages/traditional/LoginPOMMethod02";
 
 const loginCreds01 = {
     username: "tomsmith",
