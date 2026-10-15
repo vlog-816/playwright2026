@@ -1,4 +1,4 @@
-import { expect, Locator, Page } from '@playwright/test';
+import test, { expect, Locator, Page } from '@playwright/test';
 import { ComputerDataType } from '../../test-data/ComputerDataType';
 import { ComputerDetailsPage } from '../../modules/pages/ComputerDetailsPage';
 import ShoppingCartPage from '../../modules/pages/ShoppingCartPage';
@@ -19,153 +19,172 @@ export default class OrderComputerTestFlow {
     }
 
     async buildComputerSelectionAndAddToCart() {
-        const computerDetailsPage = new ComputerDetailsPage(this.page);
-        const { computerClass, processor, ram, hdd, os, software, quantity } = this.computerData
-        console.log(this.computerData);
+        await test.step('Build Computer Selection And Add To Cart', async () => {
 
-        const computerComp = computerDetailsPage.computerComponent(computerClass);
-        await computerComp.unSelectAllOptions();
+            const computerDetailsPage = new ComputerDetailsPage(this.page);
+            const { computerClass, processor, ram, hdd, os, software, quantity } = this.computerData
+            console.log(this.computerData);
 
-        let processorPrice = 0;
-        let ramPrice = 0;
-        let hddPrice = 0;
-        let softwarePrice = 0;
+            const computerComp = computerDetailsPage.computerComponent(computerClass);
+            await computerComp.unSelectAllOptions();
 
-        if (processor) { processorPrice = this.getAddionalPrice(await computerComp.selectProcessor(processor)); }
+            let processorPrice = 0;
+            let ramPrice = 0;
+            let hddPrice = 0;
+            let softwarePrice = 0;
 
-        if (ram) { ramPrice = this.getAddionalPrice(await computerComp.selectRAM(ram)); }
+            if (processor) { processorPrice = this.getAddionalPrice(await computerComp.selectProcessor(processor)); }
 
-        if (hdd) { hddPrice = this.getAddionalPrice(await computerComp.selectHDD(hdd)); }
+            if (ram) { ramPrice = this.getAddionalPrice(await computerComp.selectRAM(ram)); }
 
-        if (software) { softwarePrice = this.getAddionalPrice(await computerComp.selectSofware(software)); }
+            if (hdd) { hddPrice = this.getAddionalPrice(await computerComp.selectHDD(hdd)); }
 
-        let osPrice = 0;
-        if (os) {
-            osPrice = this.getAddionalPrice(await computerComp.selectOS(os));
-        }
+            if (software) { softwarePrice = this.getAddionalPrice(await computerComp.selectSofware(software)); }
 
-        if (quantity) { await computerComp.inputQuantity(quantity); }
+            let osPrice = 0;
+            if (os) {
+                osPrice = this.getAddionalPrice(await computerComp.selectOS(os));
+            }
 
-        const basePrice = await computerComp.getBasePrice();
-        const additionPrice = processorPrice + ramPrice + hddPrice + softwarePrice + osPrice;
+            if (quantity) { await computerComp.inputQuantity(quantity); }
 
-        this.productPrice = (basePrice + additionPrice) * (quantity ? quantity : 1);
+            const basePrice = await computerComp.getBasePrice();
+            const additionPrice = processorPrice + ramPrice + hddPrice + softwarePrice + osPrice;
 
-        console.log(`processor Price: ${processorPrice} | ramPrice: ${ramPrice} | hddPrice: ${hddPrice}
+            this.productPrice = (basePrice + additionPrice) * (quantity ? quantity : 1);
+
+            console.log(`processor Price: ${processorPrice} | ramPrice: ${ramPrice} | hddPrice: ${hddPrice}
                     softwarePrice: ${softwarePrice} | osPrice: ${osPrice} | quanlity: ${quantity}
                     |basePrice:${basePrice} | additionPrice: ${additionPrice} | productPrice: ${this.productPrice}`);
-        //Add to cart
+            //Add to cart
 
-        const requestSlug = await computerComp.clickOnAddToCart();
-        await this.page.waitForResponse(requestSlug);
+            const requestSlug = await computerComp.clickOnAddToCart();
+            await this.page.waitForResponse(requestSlug);
+        })
     }
 
     async buildAndAddToCart() {
 
-        await this.buildComputerSelectionAndAddToCart();
+        await test.step('Build And Add To Cart', async () => {
+            await this.buildComputerSelectionAndAddToCart();
 
-        //Navigate to Shopping cart page
-        const computerDetailsPage = new ComputerDetailsPage(this.page);
-        await computerDetailsPage.headerComponent().clickOnShoppingCart();
+            //Navigate to Shopping cart page
+            const computerDetailsPage = new ComputerDetailsPage(this.page);
+            await computerDetailsPage.headerComponent().clickOnShoppingCart();
+        })
     }
 
     async verifyShoppingCart() {
-        //cart row: price = productPrice, price*Qty = total
-        const shoppingCartPage = new ShoppingCartPage(this.page);
-        const cartItems: CartItemRowComponent[] = await shoppingCartPage.cartItemRowComponentList();
+        await test.step('Verify Shopping Cart', async () => {
 
-        expect(cartItems.length).toBeGreaterThan(0);
+            //cart row: price = productPrice, price*Qty = total
+            const shoppingCartPage = new ShoppingCartPage(this.page);
+            const cartItems: CartItemRowComponent[] = await shoppingCartPage.cartItemRowComponentList();
 
-        let itemSubtotals = 0;
-        for (const item of cartItems) {
-            const itemPrice = await item.getPrice();
-            const itemQuantity = await item.getQuantity();
-            const itemSubtotal = await item.getSubtotal();
+            expect(cartItems.length).toBeGreaterThan(0);
 
-            expect(itemPrice * itemQuantity).toEqual(this.productPrice);
-            expect(itemPrice * itemQuantity).toEqual(itemSubtotal);
+            let itemSubtotals = 0;
+            for (const item of cartItems) {
+                const itemPrice = await item.getPrice();
+                const itemQuantity = await item.getQuantity();
+                const itemSubtotal = await item.getSubtotal();
 
-            itemSubtotals += itemSubtotal;
-        }
+                expect(itemPrice * itemQuantity).toEqual(this.productPrice);
+                expect(itemPrice * itemQuantity).toEqual(itemSubtotal);
 
-        //cart total: subtotal = total(row), total = subtotal + shipping + tax
+                itemSubtotals += itemSubtotal;
+            }
 
-        const cartTotal = shoppingCartPage.totalsComponent();
-        const priceCategory = await cartTotal.priceCategory();
-        console.log("Price category:", priceCategory);
+            //cart total: subtotal = total(row), total = subtotal + shipping + tax
 
-        const subTotal = priceCategory['Sub-Total'];
-        const shipping = priceCategory['Shipping'];
-        const tax = priceCategory['Tax'];
-        const total = priceCategory['Total'];
+            const cartTotal = shoppingCartPage.totalsComponent();
+            const priceCategory = await cartTotal.priceCategory();
+            console.log("Price category:", priceCategory);
 
-        expect(subTotal).toBe(itemSubtotals);
-        expect(total).toBe(subTotal + shipping + tax);
+            const subTotal = priceCategory['Sub-Total'];
+            const shipping = priceCategory['Shipping'];
+            const tax = priceCategory['Tax'];
+            const total = priceCategory['Total'];
 
+            expect(subTotal).toBe(itemSubtotals);
+            expect(total).toBe(subTotal + shipping + tax);
+        })
     }
 
     async agreeTosAndCheckout() {
-        const totalsComponent = new ShoppingCartPage(this.page).totalsComponent();
-        await totalsComponent.clickTosCheckbox();
-        await totalsComponent.clickCheckoutBtn();
+        await test.step('Agree TOS And Checkout', async () => {
 
-        const checkoutOptionPage = new CheckoutOptionPage(this.page);
-        await checkoutOptionPage.checkoutAsGuest();
+            const totalsComponent = new ShoppingCartPage(this.page).totalsComponent();
+            await totalsComponent.clickTosCheckbox();
+            await totalsComponent.clickCheckoutBtn();
+
+            const checkoutOptionPage = new CheckoutOptionPage(this.page);
+            await checkoutOptionPage.checkoutAsGuest();
+        })
     }
 
     async inputBillingAddress() {
+        await test.step('Input Billing Address', async () => {
 
-        const { firstName, lastName, email, company, country, stateProvince, city, address1, address2,
-            zipPostalCode, phoneNumber, faxNumber } = defaultCheckoutData;
+            const { firstName, lastName, email, company, country, stateProvince, city, address1, address2,
+                zipPostalCode, phoneNumber, faxNumber } = defaultCheckoutData;
 
-        const billingAddrComp = new CheckoutPage(this.page).billingAddressComp();
-        await billingAddrComp.inputFirstname(firstName);
-        await billingAddrComp.inputLastname(lastName);
-        await billingAddrComp.inputEmail(email);
-        await billingAddrComp.inputCompany(company);
-        await billingAddrComp.selectCountry(country);
-        await billingAddrComp.selectStateProvince(stateProvince);
-        await billingAddrComp.inputCity(city);
-        await billingAddrComp.inputAddress1(address1);
-        await billingAddrComp.inputAddress2(address2);
-        await billingAddrComp.inputZip(zipPostalCode);
-        await billingAddrComp.inputPhoneNumber(phoneNumber);
-        await billingAddrComp.inputFax(faxNumber);
+            const billingAddrComp = new CheckoutPage(this.page).billingAddressComp();
+            await billingAddrComp.inputFirstname(firstName);
+            await billingAddrComp.inputLastname(lastName);
+            await billingAddrComp.inputEmail(email);
+            await billingAddrComp.inputCompany(company);
+            await billingAddrComp.selectCountry(country);
+            await billingAddrComp.selectStateProvince(stateProvince);
+            await billingAddrComp.inputCity(city);
+            await billingAddrComp.inputAddress1(address1);
+            await billingAddrComp.inputAddress2(address2);
+            await billingAddrComp.inputZip(zipPostalCode);
+            await billingAddrComp.inputPhoneNumber(phoneNumber);
+            await billingAddrComp.inputFax(faxNumber);
 
-        const response = await billingAddrComp.clickContinueBtn();
-        await this.page.waitForResponse(response);
-
+            const response = await billingAddrComp.clickContinueBtn();
+            await this.page.waitForResponse(response);
+        })
     }
 
     async inputShippingAddress() {
-        const shippingAddressComp = new CheckoutPage(this.page).shippingAddressComp();
-        const response = await shippingAddressComp.clickOnContinueBtn();
-        await this.page.waitForResponse(response);
+        await test.step('Input Shipping Address', async () => {
+
+            const shippingAddressComp = new CheckoutPage(this.page).shippingAddressComp();
+            const response = await shippingAddressComp.clickOnContinueBtn();
+            await this.page.waitForResponse(response);
+        })
     }
 
     async selectShippingMethod() {
-        //ramdomly selector method
-        const shippingMethodComp = new CheckoutPage(this.page).shippingMethodComp();
-        const shippingMethodLocators: Locator[] = await shippingMethodComp.shippingMethodLocatorsList();
-        const randomIndex = Math.floor(Math.random() * shippingMethodLocators.length);
 
-        await shippingMethodLocators[randomIndex].click();
+        await test.step('Select Shipping Method', async () => {
+            //ramdomly selector method
+            const shippingMethodComp = new CheckoutPage(this.page).shippingMethodComp();
+            const shippingMethodLocators: Locator[] = await shippingMethodComp.shippingMethodLocatorsList();
+            const randomIndex = Math.floor(Math.random() * shippingMethodLocators.length);
 
-        const innerText = await shippingMethodLocators[randomIndex].innerText();
-        const shippingFee = this.getAddionalPrice(innerText);
+            await shippingMethodLocators[randomIndex].click();
 
-        console.log('shippingFee:', shippingFee);
+            const innerText = await shippingMethodLocators[randomIndex].innerText();
+            const shippingFee = this.getAddionalPrice(innerText);
 
-        const response = await shippingMethodComp.clickOnContinueBtn();
-        await this.page.waitForResponse(response);
+            console.log('shippingFee:', shippingFee);
 
+            const response = await shippingMethodComp.clickOnContinueBtn();
+            await this.page.waitForResponse(response);
+        })
     }
 
     async selectPaymentMethod() {
-        const paymentMethodComp = new CheckoutPage(this.page).paymentMethodComp();
-        await paymentMethodComp.selectPaymentMethod(this.computerData.paymentMethod || PAYMENT_METHOD.credit);
-        const responseSlug = await paymentMethodComp.clickOnContinueBtn();
-        await this.page.waitForResponse(responseSlug);
+        await test.step('Select Payment Method', async () => {
+
+            const paymentMethodComp = new CheckoutPage(this.page).paymentMethodComp();
+            await paymentMethodComp.selectPaymentMethod(this.computerData.paymentMethod || PAYMENT_METHOD.credit);
+            const responseSlug = await paymentMethodComp.clickOnContinueBtn();
+            await this.page.waitForResponse(responseSlug);
+        })
     }
 
     async inputPaymentInformation() {
@@ -179,35 +198,39 @@ export default class OrderComputerTestFlow {
         case purchase:
         default: inputCreditCard
 */
-        const paymentInforComp = new CheckoutPage(this.page).paymentInformationComp();
-        const paymentMethod = this.computerData.paymentMethod || PAYMENT_METHOD.credit;
+        await test.step('Input Payment Information', async () => {
 
-        switch (paymentMethod) {
-            case PAYMENT_METHOD.credit:
-                await this.inputCreditCard(this.computerData.creditCard, paymentInforComp);
-                break;
-            case PAYMENT_METHOD.purchase:
-                await paymentInforComp.inputPoNumber(this.computerData.poNumber)
-                break;
-            case PAYMENT_METHOD.money:
-            case PAYMENT_METHOD.cod:
-                break;
-            default:
-                await this.inputCreditCard(this.computerData.creditCard, paymentInforComp);
-                break;
-        }
+            const paymentInforComp = new CheckoutPage(this.page).paymentInformationComp();
+            const paymentMethod = this.computerData.paymentMethod || PAYMENT_METHOD.credit;
 
-        const responseSlug = await paymentInforComp.clickOnContinueBtn();
-        await this.page.waitForResponse(responseSlug);
+            switch (paymentMethod) {
+                case PAYMENT_METHOD.credit:
+                    await this.inputCreditCard(this.computerData.creditCard, paymentInforComp);
+                    break;
+                case PAYMENT_METHOD.purchase:
+                    await paymentInforComp.inputPoNumber(this.computerData.poNumber)
+                    break;
+                case PAYMENT_METHOD.money:
+                case PAYMENT_METHOD.cod:
+                    break;
+                default:
+                    await this.inputCreditCard(this.computerData.creditCard, paymentInforComp);
+                    break;
+            }
 
+            const responseSlug = await paymentInforComp.clickOnContinueBtn();
+            await this.page.waitForResponse(responseSlug);
+        })
     }
 
     async confirmOrder() {
+        await test.step('Confirm Order', async () => {
 
-        const confirmOrderComp = new CheckoutPage(this.page).confirmOrderComp();
-        const responseSlug = await confirmOrderComp.clickOnContinueBtn();
+            const confirmOrderComp = new CheckoutPage(this.page).confirmOrderComp();
+            const responseSlug = await confirmOrderComp.clickOnContinueBtn();
 
-        await this.page.waitForResponse(responseSlug);
+            await this.page.waitForResponse(responseSlug);
+        })
     }
 
     private getAddionalPrice(optionFullText: string): number {
@@ -221,6 +244,7 @@ export default class OrderComputerTestFlow {
         if (matches) return Number(matches[1].trim())
 
         return 0;
+
     }
 
     private async inputCreditCard(card: any, paymentInfoComp: PaymentInformationComponent) {
