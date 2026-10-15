@@ -175,3 +175,17 @@ Day 38
 Day 39
 - configuration
 report: html, allure-reporter
+
+Day 40
+- hood:
+    fixture: customize fixture
+    worker
+    before each: login trước khi test,...b 
+    before all: chỉ xuất hiện 1 lần, nếu chạy worker parallel sẽ chạy cho từng worker. Không share dùng chung được
+    share dùng chung data: global set up and tear down. Global set up chỉ thực hiện trên 1 máy
+
+    beforeAll()
+      beforeEach()
+
+Day 41
+- Jenkins
