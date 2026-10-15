@@ -1,7 +1,8 @@
 import { expect, Page } from "@playwright/test";
-import FooterColumnComponent from "../../components/global/footer/FooterColumnComponent";
-import FooterComponent from "../../components/global/footer/FooterComponent";
-import BasePage from "../../pages/BasePage";
+import BasePage from "../../modules/pages/BasePage";
+import FooterComponent from "../../modules/components/global/footer/FooterComponent";
+import FooterColumnComponent from "../../modules/components/global/footer/FooterColumnComponent";
+
 
 export default class FooterTestFlow {
 
